@@ -1,3 +1,4 @@
+require 'highline/import'
 require 'optparse'
 require 'rugged'
 require 'progress'
@@ -11,6 +12,10 @@ module Uas2Git
       show_help_message('Too many arguments') if args.size > 1
 
       @project_name = args.first
+
+      if @options[:password].nil? then
+        @options[:password] = ask('Enter password for ' + @options[:username] + '@' + @options[:host] + ': ') { |q| q.echo = false }
+      end
     end
 
     def run!

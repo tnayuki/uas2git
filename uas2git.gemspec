@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'activerecord'
+  spec.add_runtime_dependency 'highline'
   spec.add_runtime_dependency 'rugged'
   spec.add_runtime_dependency 'pg'
   spec.add_runtime_dependency 'progress'
