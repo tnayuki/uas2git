@@ -202,7 +202,7 @@ fileFormatVersion: 2
 guid: #{guid_string}
 folderAsset: yes
 DefaultImporter:
-  userData:
+  userData:\s
 EOF
     end
 
