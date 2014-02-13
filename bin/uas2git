@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'uas2git'
+
+migration = Uas2Git::Migration.new(ARGV)
+migration.run!
