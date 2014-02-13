@@ -13,6 +13,11 @@ module Uas2Git
 
       @project_name = args.first
 
+      begin
+        show_help_message('The repository must be empty') unless Rugged::Repository.new('.').empty?
+      rescue
+      end
+
       if @options[:password].nil? then
         @options[:password] = ask('Enter password for ' + @options[:username] + '@' + @options[:host] + ': ') { |q| q.echo = false }
       end
