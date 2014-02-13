@@ -124,6 +124,24 @@ module Uas2Git
               end
             end
 
+            Uas2Git::Uas::Model::AssetVersion.joins(:type).where('assettype.description = \'dir\'').where(
+                'created_in <= :c AND assetversion.serial IN (SELECT assetversion FROM changesetcontents WHERE changesetcontents.changeset <= :c) AND revision = (SELECT MAX(revision) FROM assetversion AV2 WHERE AV2.asset = assetversion.asset AND AV2.created_in <= :c)',
+                { :c => changeset.serial }
+            ).find_each do |asset_version|
+
+              next if asset_version.parent.nil?
+
+              path = dirs[changeset.serial][asset_version.parent.serial] + '/' + asset_version.name
+
+              next if path.start_with?('Trash/')
+
+              index.add(
+                  :path => path + '.meta',
+                  :oid => repo.write(generate_directory_meta(asset_version.asset), :blob),
+                  :mode => 0100644
+              )
+            end
+
             author = {
                 :name => changeset.creator.username,
                 :email => '',
@@ -187,6 +205,18 @@ module Uas2Git
 
       @opts.parse! args
       options
+    end
+
+    def generate_directory_meta(asset)
+      guid_string = [asset.guid].pack('B*').unpack("H*").join
+
+      <<EOF
+fileFormatVersion: 2
+guid: #{guid_string}
+folderAsset: yes
+DefaultImporter:
+  userData:
+EOF
     end
 
     def show_help_message(msg)
