@@ -49,22 +49,9 @@ module Uas2Git
         asset_versions.find_each do |asset_version|
           Progress.step do
             asset_version.contents.each do |contents|
-              blob = ''
-
-              asset_version.transaction do
-                fd = asset_version.class.connection.raw_connection.lo_open(contents.stream, PG::INV_READ)
-
-                loop do
-                  data = asset_version.class.connection.raw_connection.lo_read(fd, 65536)
-                  break if data == nil || data.empty?
-
-                  blob += data
-                end
-
-                asset_version.class.connection.raw_connection.lo_close(fd)
+              oid = LOReader.new(asset_version.class.connection.raw_connection).open(contents.stream) do |lo|
+                Rugged::Blob.from_chunks(repo, lo)
               end
-
-              oid = repo.write(blob, :blob)
 
               if contents.tag == 'asset' then
                 oids[asset_version.asset.serial] = {} if oids[asset_version.asset.serial].nil?
