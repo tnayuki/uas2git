@@ -11,11 +11,10 @@ A tool for migrating Unity Asset Server projects to git
     Usage: uas2git PROJECT_NAME [options]
 
     Specific options:
-        -H, --host NAME                  Unity Asset Server host
-        -u, --username NAME              Crendential for Unity Asset Server
-        -p, --password PASSWD
+        -h HOSTNAME                      Unity Asset Server host (default: "localhost")
+        -U NAME                          Unity Asset Server user name (default: "admin")
 
-        -h, --help                       Show this message
+            --help                       Show this message
 
 ## Contributing
 

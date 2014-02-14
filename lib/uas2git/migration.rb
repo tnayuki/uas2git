@@ -18,18 +18,17 @@ module Uas2Git
       rescue
       end
 
-      if @options[:password].nil? then
-        @options[:password] = ask('Enter password for ' + @options[:username] + '@' + @options[:host] + ': ') { |q| q.echo = false }
-      end
     end
 
     def run!
+      password = ask('Enter password for ' + @options[:username] + '@' + @options[:host] + ': ') { |q| q.echo = false }
+
       ActiveRecord::Base.establish_connection(
           :adapter  => 'postgresql',
           :host     => @options[:host],
           :port     => '10733',
           :username => @options[:username],
-          :password => @options[:password],
+          :password => password,
           :database => @project_name
       )
 
@@ -160,7 +159,6 @@ module Uas2Git
       options = {}
       options[:host] = 'localhost'
       options[:username] = 'admin'
-      options[:password] = nil
 
       @opts = OptionParser.new do |opts|
         opts.banner = 'Usage: uas2git PROJECT_NAME [options]'
@@ -168,23 +166,17 @@ module Uas2Git
         opts.separator ''
         opts.separator 'Specific options:'
 
-        opts.on('-H', '--host NAME', 'Unity Asset Server host') do |host|
+        opts.on('-h HOSTNAME', 'Unity Asset Server host (default: "localhost")') do |host|
           options[:host] = host
         end
 
-        opts.on('-u', '--username NAME', 'Crendential for Unity Asset Server') do |username|
+        opts.on('-U NAME', 'Unity Asset Server user name (default: "admin")') do |username|
           options[:username] = username
-        end
-
-        opts.on('-p', '--password PASSWD') do |password|
-          options[:password] = password
         end
 
         opts.separator ''
 
-        # No argument, shows at tail.  This will print an options summary.
-        # Try it and see!
-        opts.on_tail('-h', '--help', 'Show this message') do
+        opts.on_tail('--help', 'Show this message') do
           puts opts
           exit
         end
