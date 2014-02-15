@@ -9,6 +9,10 @@ module Uas2Git
         self.primary_key = 'serial'
 
         has_many :versions, :class_name => 'AssetVersion', :primary_key => 'serial', :foreign_key => 'asset'
+
+        def guid_hex
+          [self.guid].pack('B*').unpack("H*").join
+        end
       end
 
       class AssetContents < ActiveRecord::Base

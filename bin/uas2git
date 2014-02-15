@@ -3,5 +3,5 @@
 require 'rubygems'
 require 'uas2git'
 
-migration = Uas2Git::Migration.new(ARGV)
-migration.run!
+main = Uas2Git::Main.new(ARGV)
+main.run!
