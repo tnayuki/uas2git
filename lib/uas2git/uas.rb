@@ -17,7 +17,6 @@ module Uas2Git
 
       class AssetContents < ActiveRecord::Base
         self.table_name = 'assetcontents'
-        self.primary_key = [ 'assetversion', 'tag' ]
 
         belongs_to :asset_version, :class_name => 'AssetVersion', :primary_key => 'serial', :foreign_key => 'assetversion'
       end
