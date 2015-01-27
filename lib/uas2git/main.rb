@@ -1,6 +1,7 @@
 require 'highline/import'
 require 'optparse'
 require 'rugged'
+require 'pg'
 require 'progress'
 
 module Uas2Git
@@ -23,13 +24,23 @@ module Uas2Git
     def run!
       password = ask('Enter password for ' + @options[:username] + '@' + @options[:host] + ': ') { |q| q.echo = false }
 
+      connection = PG::connect(
+          :host     => @options[:host],
+          :port     => '10733',
+          :user     => @options[:username],
+          :password => password,
+          :dbname   => 'template1'
+      )
+
+      result = connection.exec_params("SELECT db_name($1)", [ @project_name ])
+
       ActiveRecord::Base.establish_connection(
           :adapter  => 'postgresql',
           :host     => @options[:host],
           :port     => '10733',
           :username => @options[:username],
           :password => password,
-          :database => @project_name
+          :database => result[0]['db_name']
       )
 
       # Initialize a git repository
