@@ -81,7 +81,7 @@ module Uas2Git
             end
           else
             v.contents.each do |c|
-              oid = LOReader.new(v.class.connection.raw_connection).open(c.stream) { |lo| Rugged::Blob.from_chunks(@repo, lo) }
+              oid = LOReader.new(v.class.connection.raw_connection).open(c.stream) { |lo| Rugged::Blob.from_io(@repo, lo) }
 
               @index << { path: @paths[v.asset.serial], oid: oid, mode: 0100644 } if c.tag == 'asset'
               @index << { path: @paths[v.asset.serial] + '.meta', oid: oid, mode: 0100644 } if c.tag == 'asset.meta'
