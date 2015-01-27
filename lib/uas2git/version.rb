@@ -1,3 +1,3 @@
-module UAS2Git
-  VERSION = '0.9.9'
+module Uas2Git
+  VERSION = '0.9.9.1'
 end

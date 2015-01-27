@@ -5,7 +5,7 @@ require 'uas2git/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'uas2git'
-  spec.version       = UAS2Git::VERSION
+  spec.version       = Uas2Git::VERSION
   spec.authors       = ['Toru Nayuki']
   spec.email         = ['tnayuki@icloud.com']
   spec.summary       = 'A tool for migrating Unity Asset Server projects to git'
